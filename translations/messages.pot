@@ -1,0 +1,453 @@
+# Telugu translations for Farm Hub Project.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the Farm Hub Project project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-12-16 09:27+0530\n"
+"PO-Revision-Date: 2025-12-16 09:27+0530\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: te\n"
+"Language-Team: te <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app.py:82
+msgid "Please log in first."
+msgstr "దయచేసి ముందుగా లాగిన్ అవ్వండి."
+
+#: app.py:108
+msgid "Registration successful! Please log in."
+msgstr "నమోదు విజయవంతమైంది! దయచేసి లాగిన్ అవ్వండి."
+
+#: app.py:110
+msgid "Phone number already registered."
+msgstr "ఫోన్ నంబర్ ఇప్పటికే నమోదు చేయబడింది."
+
+#: app.py:134
+#, python-format
+msgid "Welcome back, %(name)s!"
+msgstr "తిరిగి స్వాగతం, %(name)s!"
+
+#: app.py:136
+msgid "Invalid phone number or password."
+msgstr "చెల్లని ఫోన్ నంబర్ లేదా పాస్‌వర్డ్."
+
+#: app.py:141
+msgid "You have been logged out."
+msgstr "మీరు లాగౌట్ అయ్యారు."
+
+#: app.py:157
+msgid "Access denied. Farmers only."
+msgstr "ప్రవేశం నిరాకరించబడింది. రైతులకు మాత్రమే."
+
+#: app.py:165
+msgid "Invalid input."
+msgstr "చెల్లని ఇన్‌పుట్."
+
+#: app.py:175
+msgid "Product added successfully!"
+msgstr "ఉత్పత్తి విజయవంతంగా జోడించబడింది!"
+
+#: app.py:228
+msgid "Only customers can buy products."
+msgstr "వినియోగదారులు మాత్రమే ఉత్పత్తులను కొనుగోలు చేయగలరు."
+
+#: app.py:233
+msgid "Invalid quantity."
+msgstr "చెల్లని పరిమాణం."
+
+#: app.py:252
+msgid "Order placed successfully!"
+msgstr "ఆర్డర్ విజయవంతంగా ఉంచబడింది!"
+
+#: app.py:254
+msgid "Insufficient stock."
+msgstr "తగినంత నిల్వ లేదు."
+
+#: app.py:277
+msgid "Service request submitted."
+msgstr "సేవా అభ్యర్థన సమర్పించబడింది."
+
+#: templates/base.html:6
+msgid "Farm Hub Project"
+msgstr "ఫామ్ హబ్ ప్రాజెక్ట్"
+
+#: templates/base.html:11
+msgid "Farm Hub"
+msgstr "ఫామ్ హబ్"
+
+#: templates/base.html:13
+msgid "Home"
+msgstr "హోమ్"
+
+#: templates/base.html:14
+msgid "Marketplace"
+msgstr "మార్కెట్‌ప్లేస్"
+
+#: templates/base.html:15
+msgid "Farming Guide"
+msgstr "వ్యవసాయ మార్గదర్శిని"
+
+#: templates/base.html:16
+msgid "Services"
+msgstr "సేవలు"
+
+#: templates/base.html:19
+msgid "Dashboard"
+msgstr "డాష్‌బోర్డ్"
+
+#: templates/base.html:21
+#, python-format
+msgid "Hello, %(name)s (%(role)s)"
+msgstr "నమస్కారం, %(name)s (%(role)s)"
+
+#: templates/base.html:21
+msgid "farmer"
+msgstr "రైతు"
+
+#: templates/base.html:21
+msgid "customer"
+msgstr "వినియోగదారుడు"
+
+#: templates/base.html:23
+msgid "Logout"
+msgstr "లాగౌట్"
+
+#: templates/base.html:25 templates/login.html:5 templates/login.html:13
+msgid "Login"
+msgstr "లాగిన్"
+
+#: templates/base.html:26 templates/register.html:22
+msgid "Register"
+msgstr "నమోదు"
+
+#: templates/dashboard.html:5
+#, python-format
+msgid "Welcome to Your Farm Hub Dashboard, %(name)s!"
+msgstr "మీ ఫామ్ హబ్ డాష్‌బోర్డ్‌కు స్వాగతం, %(name)s!"
+
+#: templates/dashboard.html:7
+#, python-format
+msgid "You are logged in as a **%(role)s**."
+msgstr "మీరు **%(role)s**గా లాగిన్ అయ్యారు."
+
+#: templates/dashboard.html:12
+msgid "Your primary task is to manage your produce listings and inventory."
+msgstr "మీ ప్రాథమిక పని మీ ఉత్పత్తుల జాబితా మరియు ఇన్వెంటరీని నిర్వహించడం."
+
+#: templates/dashboard.html:13
+msgid "Go to My Product Manager"
+msgstr "నా ఉత్పత్తి మేనేజర్‌కు వెళ్లండి"
+
+#: templates/dashboard.html:15
+msgid "Ready to buy fresh produce? Head straight to the marketplace!"
+msgstr "తాజా ఉత్పత్తులను కొనుగోలు చేయడానికి సిద్ధంగా ఉన్నారా? మార్కెట్‌ప్లేస్‌కు వెళ్లండి!"
+
+#: templates/dashboard.html:16
+msgid "Browse Marketplace"
+msgstr "మార్కెట్‌ప్లేస్‌ను బ్రౌజ్ చేయండి"
+
+#: templates/dashboard.html:18
+msgid ""
+"If you are seeing this, your role is not recognized. Please contact "
+"support."
+msgstr "మీ పాత్ర గుర్తించబడకపోతే, దయచేసి మద్దతు కోసం సంప్రదించండి."
+
+#: templates/farmer_add.html:4
+msgid "Farmer Dashboard"
+msgstr "రైతు డాష్‌బోర్డ్"
+
+#: templates/farmer_add.html:6
+msgid "Back to My Products"
+msgstr "నా ఉత్పత్తులకు తిరిగి వెళ్లండి"
+
+#: templates/farmer_add.html:10
+msgid "Add New Produce"
+msgstr "కొత్త పంటను జోడించండి"
+
+#: templates/farmer_add.html:12
+msgid "Product Name"
+msgstr "ఉత్పత్తి పేరు"
+
+#: templates/farmer_add.html:13
+msgid "e.g., Tomatoes"
+msgstr "ఉదా: టమాటాలు"
+
+#: templates/farmer_add.html:15
+msgid "Category"
+msgstr "వర్గం"
+
+#: templates/farmer_add.html:17
+msgid "Vegetables"
+msgstr "కూరగాయలు"
+
+#: templates/farmer_add.html:18
+msgid "Fruits"
+msgstr "పండ్లు"
+
+#: templates/farmer_add.html:19
+msgid "Grains"
+msgstr "ధాన్యాలు"
+
+#: templates/farmer_add.html:20
+msgid "Other"
+msgstr "ఇతర"
+
+#: templates/farmer_add.html:23
+msgid "Price per KG (₹)"
+msgstr "కేజీ ధర (₹)"
+
+#: templates/farmer_add.html:26
+msgid "Available Stock (KG)"
+msgstr "అందుబాటులో ఉన్న నిల్వ (KG)"
+
+#: templates/farmer_add.html:29
+msgid "List Product"
+msgstr "ఉత్పత్తిని జాబితా చేయండి"
+
+#: templates/farmer_manage.html:5
+msgid "My Listed Produce"
+msgstr "నా జాబితా చేయబడిన పంట"
+
+#: templates/farmer_manage.html:6
+msgid "Add New Product"
+msgstr "కొత్త ఉత్పత్తిని జోడించండి"
+
+#: templates/farmer_manage.html:14 templates/farmer_manage.html:15
+#: templates/marketplace.html:13 templates/marketplace.html:14
+#: templates/marketplace.html:19
+msgid "kg"
+msgstr "కేజీ"
+
+#: templates/farmer_manage.html:15
+msgid "Stock remaining:"
+msgstr "మిగిలిన నిల్వ:"
+
+#: templates/farmer_manage.html:20
+msgid "You haven't listed any products yet."
+msgstr "మీరు ఇంకా ఉత్పత్తులను జాబితా చేయలేదు."
+
+#: templates/guide.html:4
+msgid "Farming Guide & Resources"
+msgstr "వ్యవసాయ మార్గదర్శిని & వనరులు"
+
+#: templates/guide.html:6
+msgid "Seasonal Crops (India)"
+msgstr "కాలీన పంటలు (భారతదేశం)"
+
+#: templates/guide.html:8
+msgid "Kharif (Monsoon):"
+msgstr "ఖరీఫ్ (వర్షాకాలం):"
+
+#: templates/guide.html:8
+msgid "Rice, Maize, Cotton, Bajra. (Sown June/July, Harvested Sept/Oct)"
+msgstr "వరి, మొక్కజొన్న, పత్తి, సజ్జ. (జూన్/జూలైలో విత్తుతారు, సెప్టెంబర్/అక్టోబర్‌లో కోస్తారు)"
+
+#: templates/guide.html:9
+msgid "Rabi (Winter):"
+msgstr "రబీ (శీతాకాలం):"
+
+#: templates/guide.html:9
+msgid "Wheat, Barley, Mustard, Peas. (Sown Oct/Nov, Harvested Feb/April)"
+msgstr "గోధుమ, బార్లీ, ఆవాలు, బఠానీలు. (అక్టోబర్/నవంబర్‌లో విత్తుతారు, ఫిబ్రవరి/ఏప్రిల్‌లో కోస్తారు)"
+
+#: templates/guide.html:10
+msgid "Zaid (Summer):"
+msgstr "జైద్ (వేసవి):"
+
+#: templates/guide.html:10
+msgid "Watermelon, Cucumber, Leafy vegetables."
+msgstr "పుచ్చకాయ, దోసకాయ, ఆకుకూరలు."
+
+#: templates/guide.html:15
+msgid "Sustainable Practices"
+msgstr "స్థిరమైన పద్ధతులు"
+
+#: templates/guide.html:16
+msgid ""
+"Tip: Crop rotation helps maintain soil health and reduce pest build-up. "
+"Consider alternating deep-rooted and shallow-rooted plants."
+msgstr "చిట్కా: పంట మార్పిడి నేల ఆరోగ్యాన్ని కాపాడుకోవడానికి మరియు తెగుళ్ల నిర్మాణాన్ని తగ్గించడానికి సహాయపడుతుంది. లోతుగా మరియు నిస్సారంగా పాతుకుపోయిన మొక్కలను మార్చడం పరిగణించండి."
+
+#: templates/index.html:5
+msgid "Welcome to Farm Hub 🚜"
+msgstr "ఫామ్ హబ్‌కు స్వాగతం 🚜"
+
+#: templates/index.html:6
+msgid "Bridging the gap between farmers and consumers directly."
+msgstr "రైతులు మరియు వినియోగదారుల మధ్య అంతరాన్ని నేరుగా పూరించడం."
+
+#: templates/index.html:9
+msgid "Get Started Today"
+msgstr "ఈ రోజు ప్రారంభించండి"
+
+#: templates/index.html:11
+msgid "Go to Dashboard"
+msgstr "డాష్‌బోర్డ్‌కు వెళ్లండి"
+
+#: templates/index.html:17
+msgid "For Farmers"
+msgstr "రైతుల కోసం"
+
+#: templates/index.html:18
+msgid ""
+"List your produce directly to buyers and get better prices. Manage your "
+"inventory easily."
+msgstr "మీ ఉత్పత్తులను నేరుగా కొనుగోలుదారులకు జాబితా చేయండి మరియు మెరుగైన ధరలను పొందండి. మీ ఇన్వెంటరీని సులభంగా నిర్వహించండి."
+
+#: templates/index.html:21
+msgid "For Customers"
+msgstr "వినియోగదారుల కోసం"
+
+#: templates/index.html:22
+msgid ""
+"Buy fresh, locally sourced produce directly from farmers. Freshness "
+"guaranteed."
+msgstr "రైతుల నుండి నేరుగా తాజా, స్థానికంగా సేకరించిన ఉత్పత్తులను కొనుగోలు చేయండి. తాజాదనం హామీ."
+
+#: templates/index.html:25
+msgid "Information Center"
+msgstr "సమాచార కేంద్రం"
+
+#: templates/index.html:26
+msgid ""
+"Access farming guides, seasonal information, and book agricultural "
+"services."
+msgstr "వ్యవసాయ మార్గదర్శకాలు, కాలానుగుణ సమాచారం మరియు వ్యవసాయ సేవలను బుక్ చేసుకోండి."
+
+#: templates/login.html:7
+msgid "Phone Number"
+msgstr "ఫోన్ నంబర్"
+
+#: templates/login.html:10 templates/register.html:13
+msgid "Password"
+msgstr "పాస్‌వర్డ్"
+
+#: templates/login.html:15
+msgid "New here?"
+msgstr "ఇక్కడ కొత్తా?"
+
+#: templates/login.html:15
+msgid "Register account"
+msgstr "ఖాతాను నమోదు చేయండి"
+
+#: templates/marketplace.html:4
+msgid "Live Marketplace"
+msgstr "లైవ్ మార్కెట్‌ప్లేస్"
+
+#: templates/marketplace.html:5
+msgid "Browse fresh produce sourced directly from farmers."
+msgstr "రైతుల నుండి నేరుగా సేకరించిన తాజా ఉత్పత్తులను బ్రౌజ్ చేయండి."
+
+#: templates/marketplace.html:12
+msgid "Farmer:"
+msgstr "రైతు:"
+
+#: templates/marketplace.html:14
+msgid "Available:"
+msgstr "అందుబాటులో:"
+
+#: templates/marketplace.html:21
+msgid "Buy Now"
+msgstr "ఇప్పుడే కొనండి"
+
+#: templates/marketplace.html:23
+msgid "Login to Buy"
+msgstr "కొనుగోలు చేయడానికి లాగిన్ అవ్వండి"
+
+#: templates/marketplace.html:30
+msgid "No products are currently available in the marketplace."
+msgstr "మార్కెట్‌ప్లేస్‌లో ప్రస్తుతం ఉత్పత్తులు అందుబాటులో లేవు."
+
+#: templates/register.html:5
+msgid "Create Account"
+msgstr "ఖాతాను సృష్టించండి"
+
+#: templates/register.html:7
+msgid "Full Name"
+msgstr "పూర్తి పేరు"
+
+#: templates/register.html:8
+msgid "John Doe"
+msgstr "జోన్ డో"
+
+#: templates/register.html:10
+msgid "Phone Number (Login ID)"
+msgstr "ఫోన్ నంబర్ (లాగిన్ ID)"
+
+#: templates/register.html:16
+msgid "I am a:"
+msgstr "నేను ఒక:"
+
+#: templates/register.html:18
+msgid "Farmer (Sell Produce)"
+msgstr "రైతు (పంటను అమ్మేవాడు)"
+
+#: templates/register.html:19
+msgid "Customer (Buy Produce)"
+msgstr "వినియోగదారుడు (పంటను కొనేవాడు)"
+
+#: templates/register.html:24
+msgid "Already have an account?"
+msgstr "ఇప్పటికే ఖాతా ఉందా?"
+
+#: templates/register.html:24
+msgid "Login here"
+msgstr "ఇక్కడ లాగిన్ అవ్వండి"
+
+#: templates/services.html:4
+msgid "Book Agricultural Services"
+msgstr "వ్యవసాయ సేవలను బుక్ చేయండి"
+
+#: templates/services.html:5
+msgid "Need equipment or expert advice? Request services here."
+msgstr "పరికరాలు లేదా నిపుణుల సలహా కావాలా? ఇక్కడ సేవలను అభ్యర్థించండి."
+
+#: templates/services.html:9
+msgid "Select Service Type"
+msgstr "సేవా రకాన్ని ఎంచుకోండి"
+
+#: templates/services.html:11
+msgid "Tractor Rental"
+msgstr "ట్రాక్టర్ అద్దె"
+
+#: templates/services.html:12
+msgid "Drone Spraying"
+msgstr "డ్రోన్ స్ప్రేయింగ్"
+
+#: templates/services.html:13
+msgid "Soil Testing"
+msgstr "నేల పరీక్ష"
+
+#: templates/services.html:14
+msgid "Labor Requirement"
+msgstr "శ్రమ అవసరం"
+
+#: templates/services.html:15
+msgid "Veterinary Visit"
+msgstr "పశువైద్య సందర్శన"
+
+#: templates/services.html:18
+msgid "Location & Details Request"
+msgstr "స్థానం & వివరాల అభ్యర్థన"
+
+#: templates/services.html:19
+msgid "E.g., Need tractor for 2 acres plowing in Village XYZ on Monday."
+msgstr "ఉదా: సోమవారం XYZ గ్రామంలో 2 ఎకరాల దున్నుటకు ట్రాక్టర్ అవసరం."
+
+#: templates/services.html:21
+msgid "Submit Request"
+msgstr "అభ్యర్థనను సమర్పించండి"
+
+#: templates/services.html:23
+msgid ""
+"Note: Service providers will contact you on your registered phone number "
+"(if logged in)."
+msgstr "గమనిక: సర్వీస్ ప్రొవైడర్‌లు మీ నమోదు చేసుకున్న ఫోన్ నంబర్‌కు (లాగిన్ అయి ఉంటే) మిమ్మల్ని సంప్రదిస్తారు."

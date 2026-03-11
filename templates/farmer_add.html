@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block content %}
+<style>
+    /* 1. Consistent Background */
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef');
+        background-size: cover;
+        background-attachment: fixed;
+        color: #fff;
+    }
+
+    /* 2. Compact Glass Container */
+    .add-produce-container {
+        max-width: 450px; /* Matching the Edit page size */
+        margin: auto;
+        background: rgba(255, 255, 255, 0.15); 
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    /* 3. Aesthetic Form Inputs */
+    .form-control, .form-select {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: #fff !important;
+        border-radius: 8px;
+    }
+
+    /* Style for dropdown options */
+    .form-select option {
+        background: #2c3e50; 
+        color: #fff;
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 0.85rem;
+        margin-bottom: 5px;
+        color: #d1fae5; /* Soft Mint Green */
+    }
+
+    .title-text {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 5px;
+        color: #2ecc71;
+    }
+
+    .subtitle-text {
+        text-align: center;
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .back-link {
+        color: #fff;
+        font-size: 0.8rem;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-link:hover {
+        color: #2ecc71;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="add-produce-container">
+                <h2 class="title-text">{{ _('Add New Produce') }}</h2>
+                <p class="subtitle-text">{{ _('List your harvest for customers to see.') }}</p>
+                
+                <form method="post" action="{{ url_for('farmer_add') }}">
+                    <div class="mb-3">
+                        <label class="form-label">{{ _('Product Name') }}</label>
+                        <input type="text" name="name" class="form-control" required placeholder="{{ _('e.g., Organic Tomatoes') }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ _('Category') }}</label>
+                        <select name="category" class="form-select">
+                            <option value="Vegetables">{{ _('Vegetables') }}</option>
+                            <option value="Fruits">{{ _('Fruits') }}</option>
+                            <option value="Grains">{{ _('Grains') }}</option>
+                            <option value="Leafy Greens">{{ _('Leafy Greens') }}</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">{{ _('Product Image URL') }}</label>
+                        <input type="url" name="image_url" class="form-control" placeholder="https://example.com/image.jpg">
+                        <small style="font-size: 0.7rem; color: rgba(255,255,255,0.6);">{{ _('Paste a link to a photo of your produce.') }}</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label">{{ _('Price / KG (₹)') }}</label>
+                            <input type="number" step="0.01" name="price" class="form-control" required placeholder="40">
+                        </div>
+
+                        <div class="col-6 mb-3">
+                            <label class="form-label">{{ _('Stock (KG)') }}</label>
+                            <input type="number" name="stock" class="form-control" required placeholder="100">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold shadow-sm">{{ _('List Product') }}</button>
+                </form>
+                
+                <div class="mt-4 text-center">
+                    <a href="{{ url_for('farmer_manage') }}" class="back-link">
+                        <i class="fas fa-arrow-left me-1"></i> {{ _('Back to My Products') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

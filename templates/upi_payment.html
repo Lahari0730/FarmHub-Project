@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block content %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<style>
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=1600&q=80');
+        background-attachment: fixed; background-size: cover; background-position: center; min-height: 100vh;
+    }
+    .form-container {
+        background: rgba(255, 255, 255, 0.15) !important; 
+        backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 25px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    #status-msg { animation: pulse 1.5s infinite; font-weight: bold; margin-top: 15px; display: none; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+</style>
+
+<div class="form-container" style="text-align: center; max-width: 400px; margin: 40px auto; padding: 20px;">
+    <h2 style="color: #ffffff;">{{ _('Scan & Pay') }}</h2>
+    <p style="color: #ffffff;">Transferring to: <strong>{{ name }}</strong></p>
+    
+    <div style="background: #fff; padding: 20px; border-radius: 15px; margin: 20px 0; border: 2px solid #27ae60; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+        <h3 style="color: #27ae60; font-size: 28px; margin-bottom: 5px;">₹{{ amount }}</h3>
+        <p style="color: #7f8c8d; font-size: 0.9em; margin-bottom: 15px;">Secure Payment via Razorpay</p>
+
+        <div id="upi-link" style="cursor: pointer;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=upi://pay?pa={{ upi }}%26pn={{ name }}%26am={{ amount }}%26cu=INR" 
+                 alt="UPI QR Code" style="border: 5px solid #f1f1f1; border-radius: 10px; width: 100%; max-width: 200px;">
+        </div>
+
+        <div style="margin-top: 20px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/UPI-Logo.png/640px-UPI-Logo.png" width="80" alt="UPI">
+            <p style="font-size: 0.8em; color: #95a5a6; margin-top: 5px;">{{ _('Scan with GPay, PhonePe, or Paytm') }}</p>
+        </div>
+    </div>
+
+    <div id="status-msg" style="color: #f1c40f;">
+        <i class="fas fa-sync-alt fa-spin me-2"></i> {{ _('Waiting for payment confirmation...') }}
+    </div>
+
+    <button type="button" id="rzp-button" class="btn" style="width: 100%; background-color: #27ae60; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">
+        {{ _('Open Payment Scanner') }}
+    </button>
+
+    <form action="{{ url_for('view_orders') }}" method="GET">
+        <button type="submit" class="btn" style="width: 100%; background-color: rgba(255, 255, 255, 0.2); color: white; padding: 10px; border: 1px solid white; border-radius: 8px; font-weight: normal; cursor: pointer;">
+            {{ _('I Have Paid - Confirm Order') }}
+        </button>
+    </form>
+</div>
+
+<script>
+    var cleanAmount = Math.round(parseFloat("{{ amount }}") * 100);
+
+    var options = {
+        "key": "rzp_test_S6d5JZjvWWfCZG", 
+        "amount": cleanAmount, 
+        "currency": "INR",
+        "name": "FarmHub",
+        "description": "Payment for {{ name }}",
+        "handler": function (response){
+            // Automatic Success Logic
+            document.getElementById('status-msg').style.display = 'block';
+            document.getElementById('status-msg').innerHTML = "✅ {{ _('Payment Successful! Redirecting...') }}";
+            document.getElementById('status-msg').style.color = "#2ecc71";
+            
+            setTimeout(() => {
+                window.location.href = "{{ url_for('view_orders') }}";
+            }, 2000);
+        },
+        "theme": { "color": "#27ae60" }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    document.getElementById('rzp-button').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+
+    document.getElementById('upi-link').onclick = function(e){
+        rzp1.open();
+    }
+</script>
+{% endblock %}

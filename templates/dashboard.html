@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem;">
+    <h1>{{ _('Welcome to Your Farm Hub Dashboard, %(name)s!', name=session.name) }}</h1>
+    <p style="font-size: 1.2rem;">
+        {{ _('You are logged in as a **%(role)s**.', role=session.role | capitalize) }}
+    </p>
+
+    <div style="margin-top: 30px;">
+        {% if session.role == 'farmer' %}
+            <p>{{ _('Your primary task is to manage your produce listings and inventory.') }}</p>
+            <a href="{{ url_for('farmer_manage') }}" class="btn" style="padding: 15px 30px; font-size: 1.1rem;">{{ _('Go to My Product Manager') }} &rarr;</a>
+        {% elif session.role == 'customer' %}
+            <p>{{ _('Ready to buy fresh produce? Head straight to the marketplace!') }}</p>
+            <a href="{{ url_for('marketplace') }}" class="btn" style="padding: 15px 30px; font-size: 1.1rem;">{{ _('Browse Marketplace') }} &rarr;</a>
+        {% else %}
+            <p>{{ _('If you are seeing this, your role is not recognized. Please contact support.') }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

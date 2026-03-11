@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* 1. Background Image and Overlay */
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                    url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: white;
+    }
+
+    /* 2. Glassmorphism Card for the Table */
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 30px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 3. Table Styling */
+    .table {
+        color: white !important;
+        background: transparent !important;
+    }
+
+    .table thead {
+        background: rgba(46, 204, 113, 0.3);
+    }
+
+    .table thead th {
+        color: #2ecc71 !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: 0.3s;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .table td {
+        padding: 15px;
+        vertical-align: middle;
+        color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .fw-bold {
+        color: #d2f7da !important;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+        border-radius: 6px;
+    }
+
+    /* Feedback Box styling */
+    .rating-container {
+        background: rgba(46, 204, 113, 0.1);
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px dashed #2ecc71;
+        margin-top: 10px;
+    }
+
+    .feedback-input {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 8px;
+        padding: 8px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="glass-panel">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="mb-0"><i class="fas fa-history text-success me-2"></i> {{ _('My Service Requests') }}</h3>
+            <a href="{{ url_for('services') }}" class="btn btn-outline-light btn-sm px-4 rounded-pill">
+                <i class="fas fa-arrow-left me-1"></i> {{ _('Back to Marketplace') }}
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>{{ _('Service') }}</th>
+                        <th>{{ _('Details') }}</th>
+                        <th>{{ _('Status') }}</th>
+                        <th>{{ _('Contact & Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if requests %}
+                        {% for req in requests %}
+                        <tr>
+                            <td class="fw-bold">{{ req['service_type'] | localize }}</td>
+                            <td>{{ req['details'] | localize }}</td>
+                            
+                            <td>
+                                {% if req['status'] == 'Pending' %}
+                                    <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i> {{ _('Pending') }}</span>
+                                {% elif req['status'] == 'Accepted' %}
+                                    <span class="badge bg-primary"><i class="fas fa-tools me-1"></i> {{ _('In Progress') }}</span>
+                                {% elif req['status'] == 'Completed' %}
+                                    <span class="badge bg-success"><i class="fas fa-check-double me-1"></i> {{ _('Completed') }}</span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {# 1. SHOW CONTACT BUTTONS IF ACCEPTED OR COMPLETED #}
+                                {% if req['status'] == 'Accepted' or req['status'] == 'Completed' %}
+                                    <div class="btn-group btn-group-sm mb-2">
+                                        <a href="https://wa.me/91{{ req['provider_phone'] }}" class="btn btn-success" target="_blank">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </a>
+                                        <a href="tel:{{ req['provider_phone'] }}" class="btn btn-primary">
+                                            <i class="fas fa-phone"></i>
+                                        </a>
+                                    </div>
+                                {% endif %}
+
+                                {# 2. SHOW "MARK AS FINISHED" ONLY IF ACCEPTED #}
+                                {% if req['status'] == 'Accepted' %}
+                                    <div class="mt-1">
+                                        <a href="{{ url_for('mark_service_complete', request_id=req['id']) }}" class="btn btn-sm btn-outline-success w-100">
+                                            <i class="fas fa-check me-1"></i> {{ _('Mark Finished') }}
+                                        </a>
+                                    </div>
+
+                                {# 3. SHOW RATING FORM ONLY IF COMPLETED #}
+                                {% elif req['status'] == 'Completed' %}
+                                    <div class="rating-container">
+                                        <form action="{{ url_for('submit_feedback', request_id=req['id']) }}" method="POST">
+                                            <div class="d-flex flex-column gap-2">
+                                                <select name="rating" class="feedback-input" required>
+                                                    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                                                    <option value="4">⭐⭐⭐⭐ (4)</option>
+                                                    <option value="3">⭐⭐⭐ (3)</option>
+                                                    <option value="2">⭐⭐ (2)</option>
+                                                    <option value="1">⭐ (1)</option>
+                                                </select>
+                                                <textarea name="comment" class="feedback-input" rows="1" placeholder="{{ _('Comment...') }}"></textarea>
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    {{ _('Rate Now') }}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                {# 4. SHOW LOCKED IF PENDING #}
+                                {% else %}
+                                    <span class="text-white-50 small"><em><i class="fas fa-lock me-1"></i> {{ _('Locked') }}</em></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-5 text-white-50">
+                                <i class="fas fa-folder-open fa-3x mb-3"></i><br>
+                                {{ _('You haven’t made any requests yet.') }}
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

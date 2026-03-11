@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center mt-5">
+    <div class="card p-5 shadow">
+        <h2 class="text-success">✅ Order Placed Successfully!</h2>
+        <p>Your Order ID is: <strong>#{{ order.id }}</strong></p>
+        <p>The farmer has been notified and will start processing your delivery shortly.</p>
+        <hr>
+        <a href="{{ url_for('view_orders') }}" class="btn btn-primary">Track My Order</a>
+        <a href="{{ url_for('marketplace') }}" class="btn btn-outline-secondary">Continue Shopping</a>
+    </div>
+</div>
+{% endblock %}

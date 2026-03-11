@@ -1,0 +1,93 @@
+/* static/style.css */
+:root {
+    --primary-color: #2ecc71; /* Green for farming */
+    --secondary-color: #27ae60;
+    --dark-color: #34495e;
+    --light-color: #ecf0f1;
+    --danger-color: #e74c3c;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+.navbar .logo { font-weight: bold; font-size: 1.2rem;}
+
+/* Layout */
+.container { width: 80%; margin: auto; overflow: hidden; padding: 2rem 0; }
+
+/* Forms */
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 2rem auto;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box; 
+}
+
+.btn {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn:hover { background: var(--secondary-color); }
+.btn-danger { background-color: var(--danger-color); }
+
+/* Grid for Products */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.product-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-top: 4px solid var(--primary-color);
+}
+
+.product-card h3 { margin-top: 0; }
+.price-tag { color: var(--secondary-color); font-weight: bold; font-size: 1.2em;}
+
+/* Flash Messages */
+.alert { padding: 10px; margin-bottom: 20px; border-radius: 4px; color: white; text-align: center;}
+.alert-success { background-color: var(--primary-color); }
+.alert-danger { background-color: var(--danger-color); }
+.alert-warning { background-color: #f39c12; }
+.alert-info { background-color: #3498db; }

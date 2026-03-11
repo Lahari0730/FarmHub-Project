@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef');
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    /* Horizontal Scroll Logic */
+    .horizontal-scroll-wrapper {
+        display: flex;
+        flex-wrap: nowrap; /* Forces everything into one single row */
+        overflow-x: auto;  /* Allows side-to-side scrolling */
+        padding: 10px 5px;
+        gap: 15px;         /* Space between boxes */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Custom Scrollbar */
+    .horizontal-scroll-wrapper::-webkit-scrollbar {
+        height: 5px;
+    }
+    .horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(40, 167, 69, 0.5);
+        border-radius: 10px;
+    }
+
+    /* Small Box Styling */
+    .product-box {
+        background: #eff9f9;
+        border-radius: 12px;
+        border: none;
+        flex: 0 0 auto;    /* Prevents boxes from shrinking */
+        width: 160px;      /* Fixed tiny width */
+        transition: 0.3s;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Image Area - Exactly fixing the box */
+    .img-area {
+        height: 100px;
+        width: 100%;
+        overflow: hidden;
+        background: #fff;
+        position: relative; /* Added for the map pin absolute positioning */
+    }
+
+    .img-area img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensures image fills the area exactly */
+        display: block;
+    }
+
+    /* FEATURE ADDITION: Map Pin on Image */
+    .map-preview-link {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e74c3c;
+        font-size: 0.7rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 10;
+    }
+
+    /* Content Area */
+    .box-content {
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+    }
+
+    .category-label {
+        font-size: 0.6rem;
+        color: #28a745;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .box-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin: 2px 0;
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .price-label {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: #000;
+    }
+
+    /* FEATURE ADDITION: Delivery Estimate Tag */
+    .delivery-estimate {
+        font-size: 0.55rem;
+        color: #666;
+        background: rgba(0,0,0,0.05);
+        padding: 1px 4px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-bottom: 4px;
+    }
+
+    .id-text {
+        font-size: 0.65rem;
+        color: #777;
+        margin-bottom: 5px;
+    }
+
+    .btn-group-custom {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+    }
+
+    .btn-action {
+        font-size: 0.65rem;
+        padding: 4px;
+        flex: 1;
+        text-align: center;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .btn-edit { background: #28a745; color: white; }
+    .btn-delete { background: #dc3545; color: white; }
+
+    .inventory-title {
+        color: #fff;
+        font-weight: 700;
+        margin-left: 10px;
+    }
+</style>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3 px-2">
+        <h3 class="inventory-title">{{ _('My Inventory') }}</h3>
+        <a href="{{ url_for('farmer_add') }}" class="btn btn-success btn-sm" style="border-radius: 20px;">
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
+
+    {% if products %}
+    <div class="horizontal-scroll-wrapper">
+        {% for p in products %}
+        <div class="product-box">
+            <div class="img-area">
+                <a href="https://www.google.com/maps/search/{{ session.name }}+Farm" target="_blank" class="map-preview-link" title="Verify Location Pin">
+                    <i class="fas fa-location-dot"></i>
+                </a>
+
+                <img src="{{ p['image_url'] if p['image_url'] else 'https://via.placeholder.com/150x100' }}" alt="Product">
+            </div>
+
+            <div class="box-content">
+                <div>
+                    <span class="category-label">{{ p['category'] | localize }}</span>
+                    <h5 class="box-title">{{ p['name'] | localize }}</h5>
+                    
+                    <div class="delivery-estimate">
+                        <i class="fas fa-truck-fast"></i> 24-48h Delivery
+                    </div>
+
+                    <p class="id-text">ID #{{ p['id'] }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="price-label">₹{{ p['price'] }}<small style="font-size: 0.6rem; color: #666;">/kg</small></span>
+                        <span class="badge bg-light text-dark" style="font-size: 0.6rem; border: 1px solid #ddd;">
+                            {{ p['stock_kg'] }}kg
+                        </span>
+                    </div>
+                </div>
+
+                <div class="btn-group-custom">
+                    <a href="{{ url_for('edit_product', product_id=p['id']) }}" class="btn-action btn-edit">
+                        Edit
+                    </a>
+                    <a href="{{ url_for('delete_product', product_id=p['id']) }}" 
+                       onclick="return confirm('Delete?')" class="btn-action btn-delete">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-white text-center mt-5">No products found</p>
+    {% endif %}
+</div>
+
+{% endblock %}

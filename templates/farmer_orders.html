@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Consistent Background */
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef');
+        background-size: cover;
+        background-attachment: fixed;
+        color: #fff;
+    }
+
+    /* Glass Container matching manage.html */
+    .sales-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 25px;
+        margin-top: 20px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    /* Table styling to fit the glass look */
+    .custom-table {
+        width: 100%;
+        color: white;
+        border-collapse: collapse;
+    }
+
+    .custom-table thead th {
+        background-color: rgba(46, 204, 113, 0.8); /* Green shade */
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 0.9rem;
+    }
+
+    .custom-table tbody tr {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: 0.3s;
+    }
+
+    .custom-table tbody tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .custom-table td {
+        padding: 12px;
+        vertical-align: middle;
+    }
+
+    .page-title {
+        font-weight: 700;
+        margin-left: 5px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+</style>
+
+<div class="container mt-4">
+    <h1 class="mb-4 page-title">{{ _('Sales & Delivery') }}</h1>
+    
+    <div class="sales-container">
+        {% if orders %}
+            <div style="overflow-x:auto;">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Address</th>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in orders %}
+                        <tr>
+                            <td>#{{ o['id'] }}</td>
+                            <td>{{ o['customer_name'] }}</td>
+                            <td><small style="opacity: 0.8;">{{ o['customer_address'] or 'No address' }}</small></td>
+                            <td>{{ o['product_name'] }}</td>
+                            <td>{{ o['quantity_kg'] }} kg</td>
+                            <td>
+                                <span class="badge" style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);">
+                                    {{ o['status'] }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if o['status'] == 'Pending' %}
+                                    <a href="{{ url_for('update_order_status', order_id=o['id'], new_status='Out for Delivery') }}" 
+                                       style="background: #3498db; color: white; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">Ship</a>
+                                {% elif o['status'] == 'Out for Delivery' %}
+                                    <a href="{{ url_for('update_order_status', order_id=o['id'], new_status='Delivered') }}" 
+                                       style="background: #2ecc71; color: white; padding: 6px 12px; text-decoration: none; border-radius: 6px; font-size: 0.8rem; font-weight: 600;">Deliver</a>
+                                {% else %}
+                                    <span style="color: #2ecc71; font-weight: bold;"><i class="fas fa-check-circle"></i> Done</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <p style="font-size: 1.2rem; opacity: 0.7;">No sales yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

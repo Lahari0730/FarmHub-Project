@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* 1. Page Background and Reset */
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                    url('https://plus.unsplash.com/premium_photo-1661909896396-ecd58b5dc2d9?w=1920&auto=format&fit=crop&q=80');
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        background-repeat: no-repeat !important;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .content-wrapper {
+        background: transparent !important;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    /* 2. Professional Glassmorphism for Containers and Cards */
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.9) !important;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 15px !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+        padding: 25px;
+        transition: transform 0.3s ease;
+    }
+
+    /* 3. COMPACT BOX SIZE */
+    .compact-box {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* 4. Typography Adjustments */
+    h1, h3 {
+        color: white !important;
+        font-weight: 800;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .text-secondary-glass {
+        color: #1b5e20 !important;
+        font-weight: 700;
+    }
+
+    /* 5. Input styling to match the theme */
+    .form-control, .form-select {
+        background: rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* 6. Card Specific Hover */
+    .service-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="container mt-4">
+        
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h1><i class="fas fa-tractor text-success"></i> {{ _('Agricultural Services Marketplace') }}</h1>
+            <div>
+                <a href="{{ url_for('custom_request') }}" class="btn btn-primary shadow">
+                    <i class="fas fa-plus"></i> {{ _('New Custom Request') }}
+                </a>
+                <a href="{{ url_for('my_service_history') }}" class="btn btn-light shadow-sm border ms-2">
+                    <i class="fas fa-history"></i> {{ _('My History') }}
+                </a>
+            </div>
+        </div>
+        
+        <div class="compact-box">
+            <div class="glass-panel mb-5">
+                <h5 class="mb-3 text-secondary-glass">{{ _('Find Best Prices') }}</h5>
+                <form method="GET" action="{{ url_for('services') }}" class="row g-3">
+                    <div class="col-md-5">
+                        <label class="form-label small fw-bold">{{ _('Service Type') }}</label>
+                        <select name="service_type" class="form-select">
+                            <option value="">{{ _('All Services') }}</option>
+                            <option value="Borewell Service">{{ _('Borewell Service') }}</option>
+                            <option value="Tractor">{{ _('Tractor') }}</option>
+                            <option value="Harvester">{{ _('Harvester') }}</option>
+                            <option value="Drone Spraying">{{ _('Drone Spraying') }}</option>
+                            <option value="Soil Testing">{{ _('Soil Testing') }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label small fw-bold">{{ _('Max Price (₹/hr)') }}</label>
+                        <input type="number" name="max_price" class="form-control" placeholder="e.g. 1000">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-success w-100 fw-bold">{{ _('Search') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <h3 class="mb-4">{{ _('Available Service Providers') }}</h3>
+        <div class="row mb-5">
+            {% if listings %}
+                {% for item in listings %}
+                <div class="col-md-4 mb-4">
+                    <div class="glass-panel service-card h-100 d-flex flex-column">
+                        <div class="mb-3">
+                            <span class="badge bg-success mb-2">{{ item['service_type'] | localize }}</span>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h4 text-primary fw-bold mb-0">₹{{ item['price_per_hour'] }}</span>
+                                <span class="text-muted small">/ {{ _('hour') }}</span>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <p class="card-text text-dark"><strong>{{ _('Provider:') }}</strong> {{ item['provider_name'] }}</p>
+                            <p class="card-text text-muted small" style="min-height: 50px;">{{ item['description'] | localize }}</p>
+                        </div>
+                        <hr class="my-3">
+                        <form method="POST" action="{{ url_for('custom_request') }}">
+                            <input type="hidden" name="service_type" value="{{ item['service_type'] | localize }}">
+                            <input type="hidden" name="details" value="Booking for {{ item['service_type'] | localize }} from Provider: {{ item['provider_name'] }}">
+                            <button type="submit" class="btn btn-success w-100 fw-bold">{{ _('Book Now') }}</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center py-4">
+                    <div class="glass-panel text-dark">
+                        {{ _('No specific listings found.') }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="compact-box">
+            <div class="glass-panel border-start border-primary border-5">
+                <h3 class="text-primary mb-3 h5 fw-bold">{{ _('Submit a Custom Request') }}</h3>
+                <p class="text-muted small">{{ _('Don\'t see what you need? Post a request and providers will contact you.') }}</p>
+                <form method="POST" action="{{ url_for('custom_request') }}" class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label fw-bold small text-dark">{{ _('Service Type') }}</label>
+                        <select name="service_type" class="form-select">
+                            <option>{{ _('Borewell Service') }}</option>
+                            <option>{{ _('Tractor Rental') }}</option>
+                            <option>{{ _('Drone Spraying') }}</option>
+                            <option>{{ _('Soil Testing') }}</option>
+                            <option>{{ _('Labor Requirement') }}</option>
+                            <option>{{ _('Veterinary Visit') }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-bold small text-dark">{{ _('Location & Details') }}</label>
+                        <input type="text" name="details" class="form-control" required 
+                               placeholder="{{ _('E.g., Need borewell drilling in Village X') }}">
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm">{{ _('Post Request') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

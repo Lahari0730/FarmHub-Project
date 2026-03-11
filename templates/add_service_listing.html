@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* 1. COMPLETELY CLEAR BACKGROUND */
+    html, body {
+        height: 100%;
+        margin: 0;
+    }
+
+    body {
+        background: url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2000&auto=format&fit=crop') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        background-repeat: no-repeat !important;
+    }
+
+    /* 2. MINIMALIST TRANSPARENT BOX */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.15) !important; /* High transparency */
+        backdrop-filter: blur(15px) saturate(150%);
+        -webkit-backdrop-filter: blur(15px) saturate(150%);
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-radius: 30px !important;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2) !important;
+        margin-top: 60px;
+    }
+
+    /* 3. ELEGANT HEADER (Nature Green) */
+    .card-header {
+        background: rgba(27, 94, 32, 0.7) !important; 
+        color: #ffffff !important;
+        border-radius: 30px 30px 0 0 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+        text-align: center;
+        padding: 20px !important;
+    }
+
+    /* 4. FORM ELEMENTS */
+    .form-label {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+        margin-bottom: 8px;
+    }
+
+    /* Style for Dropdown and Inputs */
+    .form-select, .form-control {
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        color: #ffffff !important;
+        border-radius: 12px !important;
+        padding: 12px !important;
+    }
+
+    /* Dropdown options color fix */
+    .form-select option {
+        background-color: #2e7d32 !important;
+        color: white !important;
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* 5. BUTTON STYLE */
+    .btn-nature {
+        background: #2e7d32 !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 15px !important;
+        padding: 14px !important;
+        font-weight: bold;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-nature:hover {
+        background: #1b5e20 !important;
+        transform: translateY(-2px);
+    }
+
+    .cancel-link {
+        color: #ffffff !important;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        font-weight: 600;
+        text-decoration: none;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card glass-card border-0">
+                <div class="card-header">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-plus-circle me-2"></i> {{ _('New Service Listing') }}</h4>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    <form method="POST">
+                        <div class="mb-4">
+                            <label class="form-label">{{ _('Select Service/Machine Name') }}</label>
+                            <select name="service_type" class="form-select" required>
+                                <option value="" disabled selected>{{ _('Choose a service...') }}</option>
+                                <option value="Borewell Service">{{ _('Borewell Service') }}</option>
+                                <option value="Tractor Rental">{{ _('Tractor Rental') }}</option>
+                                <option value="Harvester Rental">{{ _('Harvester Rental') }}</option>
+                                <option value="Drone Spraying">{{ _('Drone Spraying') }}</option>
+                                <option value="Soil Testing">{{ _('Soil Testing') }}</option>
+                                <option value="Pesticide Sprayer">{{ _('Pesticide Sprayer') }}</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">{{ _('Price Per Hour (₹)') }}</label>
+                            <input type="number" name="price_per_hour" class="form-control" placeholder="800" min="1" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">{{ _('Detailed Description') }}</label>
+                            <textarea name="description" class="form-control" rows="4" placeholder="{{ _('Describe your service or machine condition...') }}"></textarea>
+                        </div>
+
+                        <div class="d-grid gap-3 pt-2 text-center">
+                            <button type="submit" class="btn btn-nature btn-lg">
+                                <i class="fas fa-check-circle"></i> {{ _('Create Listing') }}
+                            </button>
+                            <a href="{{ url_for('service_provider_dashboard') }}" class="cancel-link">
+                                {{ _('Back to Dashboard') }}
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

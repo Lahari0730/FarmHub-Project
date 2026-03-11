@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: 
+            linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+            url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+    }
+
+    .table-responsive {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    /* CSS for THICK borders between columns and rows */
+    .table-bordered {
+        border: 2px solid #444 !important; /* Thick outer border */
+    }
+
+    .table-bordered th, 
+    .table-bordered td {
+        border: 2px solid #666 !important; /* Thick inner column/row lines */
+    }
+
+    h2 {
+        color: white !important;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+</style>
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Orders</h2>
+    <div class="table-responsive p-3 shadow-lg">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Product</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in orders %}
+                <tr>
+                    <td>{{ o['order_date'] }}</td>
+                    <td><strong>{{ o['product_name'] }}</strong></td>
+                    <td>₹{{ o['total_price'] }}</td>
+                    <td>
+                        <span class="badge {% if o['status'] == 'Pending' %}bg-warning text-dark{% elif o['status'] == 'Cancelled' %}bg-danger{% else %}bg-success{% endif %}">
+                            {{ o['status'] }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if o['status'] == 'Pending' %}
+                        <a href="{{ url_for('cancel_order', order_id=o['id']) }}" 
+                           class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Cancel this order?')">Cancel</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

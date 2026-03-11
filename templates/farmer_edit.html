@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* 1. Background matching the other pages */
+    body {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef');
+        background-size: cover;
+        background-attachment: fixed;
+        color: #fff;
+    }
+
+    /* 2. Compact Glass Container */
+    .edit-container {
+        max-width: 450px; /* Reduced size to look aesthetic */
+        margin: auto;
+        background: rgba(255, 255, 255, 0.15); /* Transparent glass effect */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    /* 3. Aesthetic Form Inputs */
+    .form-control {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        color: #fff !important;
+        border-radius: 8px;
+    }
+
+    .form-control:focus {
+        background: rgba(255, 255, 255, 0.2) !important;
+        box-shadow: none;
+        border-color: #2ecc71 !important;
+    }
+
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        color: #d1fae5; /* Soft Mint Green */
+    }
+
+    h2 {
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="edit-container">
+        <h2>{{ _('Edit Product') }}</h2>
+        <form method="post">
+            <div class="mb-3">
+                <label>{{ _('Product Name') }}</label>
+                <input type="text" name="name" class="form-control" value="{{ product['name'] | localize }}" required>
+            </div>
+            <div class="mb-3">
+                <label>{{ _('Category') }}</label>
+                <input type="text" name="category" class="form-control" value="{{ product['category'] | localize }}">
+            </div>
+            <div class="mb-3">
+                <label>{{ _('Price (per KG)') }}</label>
+                <input type="number" name="price" class="form-control" value="{{ product['price'] }}" required>
+            </div>
+            <div class="mb-3">
+                <label>{{ _('Stock (KG)') }}</label>
+                <input type="number" name="stock" class="form-control" value="{{ product['stock_kg'] }}" required>
+            </div>
+            <div class="mb-3">
+                <label>{{ _('Product Image URL') }}</label>
+                <input type="url" name="image_url" class="form-control" value="{{ product['image_url'] }}">
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success">{{ _('Update Product') }}</button>
+                <a href="{{ url_for('farmer_manage') }}" class="btn btn-outline-light btn-sm">{{ _('Cancel') }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

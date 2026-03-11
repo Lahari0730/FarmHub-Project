@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('lang', 'en') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Hub Project</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.15);
+            --border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2ecc71;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2ecc71;
+        }
+
+        .lang-container {
+            display: inline-flex;
+            background: var(--glass);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            align-items: center;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .lang-link { color: white; text-decoration: none; font-size: 0.9rem; }
+        .active-lang { color: #2ecc71; font-weight: bold; }
+
+        /* Hide Google top bar */
+        .goog-te-banner-frame.skiptranslate { display: none !important; }
+        body { top: 0px !important; }
+        #google_translate_element { display: none; }
+    </style>
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+<nav class="navbar">
+    <a href="{{ url_for('index') }}" class="logo">🌾 Farm Hub</a>
+
+    <div class="nav-links">
+        <a href="{{ url_for('index') }}">{{ _('Home') }}</a>
+        <a href="{{ url_for('marketplace') }}">{{ _('Marketplace') }}</a>
+
+        {% if session.get('role') == 'farmer' %}
+            <a href="{{ url_for('farming_guide') }}">{{ _('Farming Guide') }}</a>
+            <a href="{{ url_for('services') }}">{{ _('Services') }}</a>
+        {% endif %}
+
+        {% if session.get('user_id') %}
+            {# ADDED PROFILE LINK HERE #}
+            <a href="{{ url_for('profile') }}"><i class="fa fa-user-circle"></i> {{ _('My Profile') }}</a>
+            <a href="{{ url_for('dashboard') }}">{{ _('Dashboard') }}</a>
+            <a href="{{ url_for('view_orders') }}">{{ _('My Orders') }}</a>
+
+            <span style="margin-left: 15px; font-weight: bold; color: white;">
+                {{ _('Hello') }}, {{ session.get('name') }}
+                <small>({{ session.get('role') }})</small>
+            </span>
+
+            <a href="{{ url_for('logout') }}" style="color: #ff4d4d; margin-left: 10px;">
+                {{ _('Logout') }}
+            </a>
+        {% else %}
+            <a href="{{ url_for('login') }}">{{ _('Login') }}</a>
+            <a href="{{ url_for('register') }}"
+               style="background: #27ae60; padding: 8px 15px; border-radius: 5px;">
+                {{ _('Register') }}
+            </a>
+        {% endif %}
+
+        <div class="lang-container">
+            <a href="{{ url_for('set_language', lang_code='en') }}"
+               class="lang-link {% if session.get('lang') == 'en' %}active-lang{% endif %}">
+               English
+            </a>
+
+            <span style="color: rgba(255,255,255,0.3)">|</span>
+
+            <a href="{{ url_for('set_language', lang_code='te') }}"
+               class="lang-link {% if session.get('lang') == 'te' %}active-lang{% endif %}">
+               తెలుగు
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div id="google_translate_element"></div>
+
+<div class="container" style="padding: 20px 5%;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}"
+                     style="padding: 15px; background: rgba(255,255,255,0.1);
+                     border: 1px solid var(--border); color: #2ecc71;
+                     border-radius: 8px; margin: 10px 0;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</div>
+
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'te,en',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+
+    function triggerGoogleTranslate(lang) {
+        var interval = setInterval(function () {
+            var selectField = document.querySelector("select.goog-te-combo");
+            if (selectField) {
+                selectField.value = lang;
+                selectField.dispatchEvent(new Event('change'));
+                clearInterval(interval);
+            }
+        }, 100);
+        setTimeout(function () { clearInterval(interval); }, 5000);
+    }
+
+    window.addEventListener('load', function () {
+        var sessionLang = "{{ session.get('lang', 'en') }}";
+        if (sessionLang !== 'en') {
+            triggerGoogleTranslate(sessionLang);
+        }
+    });
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+        type="text/javascript"></script>
+
+</body>
+</html>

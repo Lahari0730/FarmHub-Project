@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"></div>
+
+<div class="container mt-4" style="padding-top: 20px;">
+    <div class="card shadow-lg border-0" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 15px;">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center" style="border-radius: 15px 15px 0 0; opacity: 0.9;">
+            <h4 class="mb-0"><i class="fas fa-seedling me-2"></i>{{ _('AI Crop Growth Expert') }}</h4>
+            <span class="badge bg-light text-success">{{ _('Agriculture AI') }}</span>
+        </div>
+        
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-8 mx-auto text-center">
+                    <div class="input-group shadow-sm">
+                        <button class="btn btn-light border-success" type="button" id="voice-btn" title="{{ _('Speak') }}">
+                            <i class="fas fa-microphone text-success" id="mic-icon"></i>
+                        </button>
+                        
+                        <input type="text" id="crop-input" class="form-control" style="background: rgba(255, 255, 255, 0.8);" placeholder="{{ _('Speak or enter crop name...') }}">
+                        
+                        <button class="btn btn-success" id="ask-btn">
+                            <i class="fas fa-search me-1"></i> {{ _('Generate Guide') }}
+                        </button>
+                    </div>
+                    <div id="voice-status" class="small fw-bold mt-2 text-success" style="display: none; text-shadow: 1px 1px 2px white;">
+                        <span class="spinner-grow spinner-grow-sm"></span> {{ _('Listening...') }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover rounded overflow-hidden" style="background: rgba(255, 255, 255, 0.7);">
+                    <thead class="table-dark">
+                        <tr>
+                            <th style="width: 25%;">{{ _('Aspect') }}</th>
+                            <th>{{ _('Growth Instructions & Details') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guide-table-body">
+                        <tr>
+                            <td colspan="2" class="text-center py-5" style="color: #2d5a27; font-weight: 500;">
+                                <i class="fas fa-info-circle me-1"></i> {{ _('Enter a crop name above or use the microphone to start.') }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const cropInput = document.getElementById('crop-input');
+    const askBtn = document.getElementById('ask-btn');
+    const tableBody = document.getElementById('guide-table-body');
+    const voiceBtn = document.getElementById('voice-btn');
+    const micIcon = document.getElementById('mic-icon');
+    const voiceStatus = document.getElementById('voice-status');
+
+    // --- Reliability Fixes for Voice Recognition ---
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let isRecording = false;
+    let recognition;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'en-US'; 
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        voiceBtn.addEventListener('click', () => {
+            if (!isRecording) {
+                try {
+                    recognition.start();
+                } catch (e) {
+                    console.error("Recognition error:", e);
+                }
+            } else {
+                recognition.stop(); // Force stop if button clicked while recording
+            }
+        });
+
+        recognition.onstart = () => {
+            isRecording = true;
+            micIcon.classList.replace('fa-microphone', 'fa-stop-circle');
+            micIcon.style.color = 'red';
+            voiceStatus.style.display = 'block';
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            cropInput.value = transcript;
+            getGuide(); // Process the text immediately
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech Recognition Error: ", event.error);
+            resetMicUI();
+        };
+
+        recognition.onend = () => {
+            resetMicUI();
+        };
+
+        function resetMicUI() {
+            isRecording = false;
+            micIcon.classList.replace('fa-stop-circle', 'fa-microphone');
+            micIcon.style.color = '';
+            voiceStatus.style.display = 'none';
+        }
+    } else {
+        voiceBtn.title = "Voice not supported";
+        voiceBtn.disabled = true;
+    }
+
+    // --- Guide Fetching Logic ---
+    async function getGuide() {
+        const crop = cropInput.value.trim();
+        if (!crop) return;
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="2" class="text-center py-5">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="mt-2 text-dark fw-bold">{{ _('Consulting Agriculture Database...') }}</p>
+                </td>
+            </tr>
+        `;
+
+        try {
+            const response = await fetch('/ask_bot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: crop })
+            });
+            const data = await response.json();
+            displayGuide(data.reply);
+        } catch (error) {
+            tableBody.innerHTML = `<tr><td colspan="2" class="text-danger text-center fw-bold">{{ _('Error connecting to AI.') }}</td></tr>`;
+        }
+    }
+
+    function displayGuide(text) {
+        tableBody.innerHTML = '';
+        const rows = text.split('\n').filter(line => line.trim() !== '');
+        
+        if (rows.length > 0) {
+            rows.forEach((line) => {
+                const row = document.createElement('tr');
+                if (line.includes(':') || /^\d/.test(line)) {
+                    const parts = line.split(/:(.*)/);
+                    const title = parts[0] ? `<strong>${parts[0]}</strong>` : 'Guide Detail';
+                    const content = parts[1] ? parts[1] : line;
+                    row.innerHTML = `<td class="fw-bold" style="background: rgba(0,0,0,0.05);">${title}</td><td>${content}</td>`;
+                } else {
+                    row.innerHTML = `<td class="fw-bold" style="background: rgba(0,0,0,0.05);"><i class="fas fa-arrow-right text-success"></i></td><td>${line}</td>`;
+                }
+                tableBody.appendChild(row);
+            });
+        } else {
+            tableBody.innerHTML = `<tr><td colspan="2">${text}</td></tr>`;
+        }
+    }
+
+    askBtn.addEventListener('click', getGuide);
+    cropInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') getGuide(); });
+</script>
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(40, 167, 69, 0.1) !important;
+    }
+    .table td {
+        border-color: rgba(0, 0, 0, 0.1);
+        color: #1a1a1a;
+    }
+    #voice-btn:active {
+        background-color: #e8f5e9;
+    }
+</style>
+{% endblock %}

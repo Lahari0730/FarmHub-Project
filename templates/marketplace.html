@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Fixed nature background */
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), 
+                    url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1600&q=80');
+        background-attachment: fixed;
+        background-size: cover;
+        min-height: 100vh;
+    }
+
+    /* THE FIX: Horizontal Scroll Container */
+    .horizontal-scroll-wrapper {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 20px 10px;
+        gap: 15px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .horizontal-scroll-wrapper::-webkit-scrollbar {
+        height: 6px;
+    }
+    .horizontal-scroll-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(45, 106, 79, 0.5);
+        border-radius: 10px;
+    }
+
+    .product-box {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 12px;
+        border: none;
+        flex: 0 0 auto;
+        width: 160px;
+        transition: 0.3s;
+    }
+
+    .img-area {
+        height: 90px;
+        background: #fff;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        position: relative;
+    }
+
+    .img-area img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    /* Map Pin Icon */
+    .map-link {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e74c3c;
+        font-size: 0.8rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 5;
+    }
+
+    /* NEW: Nearby Badge Styling */
+    .nearby-badge {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background: #27ae60;
+        color: white;
+        font-size: 0.55rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 700;
+        text-transform: uppercase;
+        z-index: 5;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .info-area {
+        padding: 8px;
+        text-align: center;
+    }
+
+    .product-name {
+        font-size: 0.8rem;
+        font-weight: bold;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .price {
+        color: #2d6a4f;
+        font-weight: 800;
+        font-size: 0.85rem;
+        margin-bottom: 2px;
+    }
+
+    .delivery-tag {
+        font-size: 0.6rem;
+        color: #666;
+        background: #f1f1f1;
+        padding: 2px 5px;
+        border-radius: 10px;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+
+    .buy-btn {
+        background: #2d6a4f;
+        color: white;
+        border: none;
+        font-size: 0.7rem;
+        padding: 4px 0;
+        width: 100%;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container-fluid py-5">
+    <h4 class="text-white ps-4 mb-3" style="font-weight: 600;">{{ _('Available Products') }}</h4>
+    
+    <div class="horizontal-scroll-wrapper">
+        {% for p in products %}
+        <div class="card product-box shadow-sm">
+            <div class="img-area">
+                {% if user_location and user_location.lower() in p['farmer_address'].lower() %}
+                <div class="nearby-badge">
+                    <i class="fas fa-map-marker-alt"></i> {{ _('Nearby') }}
+                </div>
+                {% endif %}
+
+                <a href="https://www.google.com/maps/search/?api=1&query={{ p['farmer_address'] }}" target="_blank" class="map-link" title="View Farm Location">
+                    <i class="fas fa-location-dot"></i>
+                </a>
+
+                <img src="{{ p['image_url'] if p['image_url'] else 'https://via.placeholder.com/100' }}" alt="{{ p['name'] | localize }}">
+            </div>
+            <div class="info-area">
+                <div class="product-name">{{ p['name'] | localize }}</div>
+                <div class="price">₹{{ p['price'] }}</div>
+                
+                <div class="delivery-tag">
+                    <i class="fas fa-truck-fast"></i> 24-48h Delivery
+                </div>
+                
+                <form action="{{ url_for('buy_product', product_id=p['id']) }}" method="POST">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="payment_method" value="UPI">
+                    <button type="submit" class="buy-btn">{{ _('Buy Now') }}</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.3)), 
+                    url('https://www.csm.tech/storage/uploads/news/66459a90c3ba31715837584Thumb.jpg');
+        background-attachment: fixed;
+        background-size: cover; 
+        background-position: center center;
+        min-height: 100vh;
+        margin: 0;
+        font-family: 'Inter', -apple-system, system-ui, sans-serif;
+
+        /* 🔽 LIMIT SCROLL */
+        max-height: 160vh;
+        overflow-y: auto;
+    }
+
+    .hero-container {
+        text-align: center;
+        padding: 8rem 1rem 4rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 600;
+        color: #070707;
+        letter-spacing: -1.2px;
+        text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        margin-bottom: 12px;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.1);
+        display: inline-block;
+        padding: 6px 20px;
+        border-radius: 4px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 40px;
+    }
+
+    .btn-custom {
+        background: #2ecc71;
+        color: white;
+        padding: 14px 36px;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 700;
+        display: inline-block;
+        transition: 0.3s;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+
+    .btn-custom:hover {
+        background: #27ae60;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+    }
+
+    /* 🧊 PRODUCT GRID IN ROWS */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        padding: 0 10% 6rem;
+    }
+
+    .product-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: #ffffff;
+        padding: 35px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        background: rgba(255, 255, 255, 0.14);
+        border-color: #2ecc71;
+    }
+
+    .product-card h3 {
+        color: #2ecc71;
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        letter-spacing: -0.5px;
+    }
+
+    .product-card p {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+</style>
+
+<div class="hero-container">
+    <h1>
+        {{ _('Welcome to') }}
+        <span class="blink-farmhub">Farm Hub</span>
+    </h1>
+
+    <p class="subtitle">
+        {{ _('Empowering Farmers, Connecting Communities') }}
+    </p>
+
+    <br>
+
+    {% if not session.user_id %}
+        <a href="{{ url_for('register') }}" class="btn-custom">
+            {{ _('Get Started Now') }}
+        </a>
+    {% else %}
+        <a href="{{ url_for('dashboard') }}" class="btn-custom">
+            {{ _('Enter Dashboard') }}
+        </a>
+    {% endif %}
+</div>
+
+<div class="product-grid">
+    <div class="product-card">
+        <h3>{{ _('For Farmers') }}</h3>
+        <p>{{ _('Digitize your harvest, reach direct buyers, and secure the best market prices with our intelligent inventory tools.') }}</p>
+    </div>
+
+    <div class="product-card">
+        <h3>{{ _('For Customers') }}</h3>
+        <p>{{ _('Source the freshest organic produce directly from verified local growers with guaranteed farm-to-table transparency.') }}</p>
+    </div>
+
+    <div class="product-card">
+        <h3>{{ _('Services Hub') }}</h3>
+        <p>{{ _('Access high-quality agricultural support including tractor rentals, soil testing, and expert technical advice.') }}</p>
+    </div>
+</div>
+
+{% endblock %}

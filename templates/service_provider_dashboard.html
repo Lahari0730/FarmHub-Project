@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
+                    url('https://plus.unsplash.com/premium_photo-1661909896396-ecd58b5dc2d9?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YWdyaWN1bHR1cmUlMjBzZXJ2aWNlc3xlbnwwfHwwfHx8MA%3D%3D');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        color: white;
+    }
+
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .table { color: white !important; background: transparent !important; }
+    .table thead { background: rgba(52, 152, 219, 0.3); }
+    .table thead th { color: #3498db !important; border-bottom: 2px solid rgba(255, 255, 255, 0.1); }
+    .table tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; }
+    .table tbody tr:hover { background: rgba(255, 255, 255, 0.05) !important; }
+    .table td { padding: 15px; vertical-align: middle; color: rgba(255, 255, 255, 0.9) !important; }
+
+    .badge { font-size: 0.8rem; padding: 6px 12px; border-radius: 6px; }
+    
+    .farmer-info-card {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 8px 12px;
+        border-radius: 10px;
+        border-left: 3px solid #3498db;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-tools text-primary me-2"></i> {{ _('Service Provider Dashboard') }}</h2>
+        {# ADDED: Button to Add New Service #}
+        <a href="{{ url_for('add_service_listing') }}" class="btn btn-success px-4 rounded-pill shadow-sm">
+            <i class="fas fa-plus-circle me-2"></i> {{ _('Add New Service') }}
+        </a>
+    </div>
+
+    {# ADDED: My Service Listings Section #}
+    <div class="glass-panel">
+        <h4 class="mb-3 text-warning"><i class="fas fa-list-ul me-2"></i> {{ _('My Service Listings') }}</h4>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>{{ _('Service Type') }}</th>
+                        <th>{{ _('Price / Hour') }}</th>
+                        <th>{{ _('Description') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if my_listings %}
+                        {% for item in my_listings %}
+                        <tr>
+                            <td class="fw-bold">{{ item['service_type'] | localize }}</td>
+                            <td>₹{{ item['price_per_hour'] }}</td>
+                            <td class="small text-white-50">{{ item['description'] | localize }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="3" class="text-center py-4 text-white-50">{{ _('No services listed yet.') }}</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="glass-panel">
+        <h4 class="mb-3 text-info"><i class="fas fa-search me-2"></i> {{ _('Available Requests') }}</h4>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>{{ _('Farmer') }}</th>
+                        <th>{{ _('Service Needed') }}</th>
+                        <th>{{ _('Details') }}</th>
+                        <th>{{ _('Action') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if available %}
+                        {% for req in available %}
+                        <tr>
+                            <td>{{ req['farmer_name'] }}</td>
+                            <td class="fw-bold">{{ req['service_type'] | localize }}</td>
+                            <td>{{ req['details'] | localize }}</td>
+                            <td>
+                                <a href="{{ url_for('accept_task', request_id=req['id']) }}" class="btn btn-sm btn-primary rounded-pill px-3">
+                                    {{ _('Accept Task') }}
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="4" class="text-center py-4 text-white-50">{{ _('No new requests available.') }}</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="glass-panel">
+        <h4 class="mb-3 text-success"><i class="fas fa-tasks me-2"></i> {{ _('My Active Tasks') }}</h4>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>{{ _('Service') }}</th>
+                        <th>{{ _('Farmer Details') }}</th>
+                        <th>{{ _('Status') }}</th>
+                        <th>{{ _('Contact') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if my_tasks %}
+                        {% for task in my_tasks %}
+                        <tr>
+                            <td class="fw-bold">{{ task['service_type'] | localize }}</td>
+                            <td>
+                                <div class="farmer-info-card">
+                                    <strong>{{ task['farmer_name'] }}</strong><br>
+                                    <small class="text-white-50"><i class="fas fa-map-marker-alt me-1"></i> {{ task['farmer_address'] or _('No address provided') }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                {% if task['status'] == 'Accepted' %}
+                                    <span class="badge bg-primary">{{ _('In Progress') }}</span>
+                                {% elif task['status'] == 'Completed' %}
+                                    <span class="badge bg-success">{{ _('Completed') }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="https://wa.me/91{{ task['farmer_phone'] }}" class="btn btn-success" target="_blank" title="WhatsApp">
+                                        <i class="fab fa-whatsapp"></i>
+                                    </a>
+                                    <a href="tel:{{ task['farmer_phone'] }}" class="btn btn-primary" title="Call">
+                                        <i class="fas fa-phone"></i>
+                                    </a>
+                                </div>
+                                <div class="mt-1 small">
+                                    <span class="text-white-50">{{ task['farmer_phone'] }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="4" class="text-center py-4 text-white-50">{{ _('You haven’t accepted any tasks yet.') }}</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
