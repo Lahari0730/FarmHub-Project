@@ -18,12 +18,15 @@ from openai import OpenAI  # Using OpenAI SDK to connect to Groq
 import os
 
 app = Flask(__name__)
-app.secret_key = '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'
+
+# Secret key and API key ni environment variables nundi teeskuntunnam
+app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'default_secret_key_for_local')
 DB_NAME = 'farmhub.db'
 
-# Groq API Configuration via OpenAI Client
+# Groq API Configuration
+# Cloud lo idhi 'GROQ_API_KEY' ane variable nundi logic teeskuntundi
 client = OpenAI(
-    api_key="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",
+    api_key=os.environ.get("GROQ_API_KEY"),
     base_url="https://api.groq.com/openai/v1"
 )
 
